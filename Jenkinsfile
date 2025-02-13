@@ -16,13 +16,26 @@ pipeline {
             }
         }
 
+        stage('Create ZIP Package') {
+            steps {
+                echo 'Empaquetando archivos en un ZIP'
+                script {
+                    sh '''
+                        mkdir -p /c/sistemas/java/output
+                        cp target/arr-model-1.0-SNAPSHOT.jar /c/sistemas/java/output/arr-model.jar
+                        cp Dockerfile /c/sistemas/java/output/Dockerfile
+                        echo "pipeline.version=1.0" > /c/sistemas/java/output/pipeline.properties
+                        cd /c/sistemas/java/output
+                        zip -r arr-model.zip arr-model.jar Dockerfile pipeline.properties
+                    '''
+                }
+            }
+        }
+
         stage('Docker Push') {
             steps {
                 script {
-                    // Establecer el contexto predeterminado
                     sh 'docker context use default'
-
-                    // Subir la imagen al repositorio
                     docker.withRegistry('https://index.docker.io/v1/', '60417d2f-7614-42bb-993d-dcb27c229d7b') {
                         sh 'docker push vestapirena/arr-model:latest'
                     }
@@ -30,11 +43,9 @@ pipeline {
             }
         }
 
-
         stage('Deploy') {
             steps {
                 echo 'Desplegando la aplicación'
-                // Agrega aquí el script para tu despliegue (por ejemplo, a Kubernetes o OpenShift)
             }
         }
     }
