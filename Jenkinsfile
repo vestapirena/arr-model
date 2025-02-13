@@ -19,7 +19,11 @@ pipeline {
         stage('Docker Push') {
             steps {
                 echo 'Subiendo la imagen Docker al repositorio'
-                sh 'docker push vestapirena/arr-model:latest'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', '60417d2f-7614-42bb-993d-dcb27c229d7b') {
+                        sh 'docker push vestapirena/arr-model:latest'
+                    }
+                }
             }
         }
 
