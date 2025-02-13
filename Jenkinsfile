@@ -9,10 +9,17 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                echo 'Construyendo la imagen Docker'
+                sh 'docker build -t tuusuario/arr-model:latest .'
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo 'Desplegando la aplicación'
-                // Agrega aquí el script para tu despliegue (por ejemplo, copiar archivos, ejecutar comandos, etc.)
+                // Aquí puedes agregar comandos para ejecutar o copiar el JAR
             }
         }
     }
