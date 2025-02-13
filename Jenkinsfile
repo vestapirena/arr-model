@@ -9,17 +9,24 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Build') {
             steps {
                 echo 'Construyendo la imagen Docker'
-                sh 'docker build -t tuusuario/arr-model:latest .'
+                sh 'docker build -t vestapirena/arr-model:latest .'
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                echo 'Subiendo la imagen Docker al repositorio'
+                sh 'docker push vestapirena/arr-model:latest'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Desplegando la aplicación'
-                // Aquí puedes agregar comandos para ejecutar o copiar el JAR
+                // Agrega aquí el script para tu despliegue (por ejemplo, a Kubernetes o OpenShift)
             }
         }
     }
